@@ -8,10 +8,10 @@ const Url = require("./models/Url");
 
 const app = express();
 
-// 1. Динамический порт
-const PORT = process.env.PORT || 3000;
+// 🔴 ДОБАВЛЕНО ДЛЯ RENDER: Говорим серверу доверять прокси-заголовкам
+app.set('trust proxy', 1);
 
-// 2. Универсальное подключение к базе данных
+const PORT = process.env.PORT || 3000;
 const mongoURI = process.env.MONGODB_URI || process.env.MONGO_URI;
 
 app.use(express.json());
@@ -32,9 +32,12 @@ app.post("/shorten", async (req, res) => {
     const newUrl = new Url({ originalUrl, shortCode });
     await newUrl.save();
 
-    // 3. Умная генерация адреса
-    const host = req.get("host");
-    const fullShortUrl = `${req.protocol}://${host}/${shortCode}`;
+    // 🔴 УМНАЯ ГЕНЕРАЦИЯ ССЫЛКИ: 
+    // Читаем реальный домен (onrender.com), который передает балансировщик Render
+    const host = req.headers['x-forwarded-host'] || req.get("host");
+    const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+    
+    const fullShortUrl = `${protocol}://${host}/${shortCode}`;
 
     res.json({ shortUrl: fullShortUrl });
   } catch (err) {
