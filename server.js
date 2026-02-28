@@ -33,12 +33,7 @@ app.post("/shorten", async (req, res) => {
     await newUrl.save();
 
     // 🔴 УМНАЯ ГЕНЕРАЦИЯ ССЫЛКИ: 
-    // Читаем реальный домен (onrender.com), который передает балансировщик Render
-    const host = req.headers['x-forwarded-host'] || req.get("host");
-    const protocol = req.headers['x-forwarded-proto'] || req.protocol;
-    
-    const fullShortUrl = `${protocol}://${host}/${shortCode}`;
-
+   const fullShortUrl = `https://link-shortener-3v2y.onrender.com/${shortCode}`;
     res.json({ shortUrl: fullShortUrl });
   } catch (err) {
     if (err.code === 11000) return res.status(400).json({ error: "Код занят" });
