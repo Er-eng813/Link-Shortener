@@ -130,15 +130,27 @@
         
         let linkHistory = JSON.parse(localStorage.getItem('shortenerHistory')) || [];
 
-        // --- ФУНКЦИИ ВАЛИДАЦИИ ---
+        // --- НОВАЯ СТРОГАЯ ФУНКЦИЯ ПРОВЕРКИ ---
         function isValidUrl(string) {
-            try {
-                const url = new URL(string);
-                // Проверяем, что это HTTP или HTTPS
-                return url.protocol === "http:" || url.protocol === "https:";
-            } catch (_) {
-                return false;  
-            }
+            // Регулярное выражение требует наличия точки и доменной зоны (минимум 2 буквы в конце)
+            const pattern = new RegExp('^(https?:\\/\\/)?'+ 
+                '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ 
+                '((\\d{1,3}\\.){3}\\d{1,3}))'+ 
+                '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ 
+                '(\\?[;&a-z\\d%_.~+=-]*)?'+ 
+                '(\\#[-a-z\\d_]*)?$','i');
+            return !!pattern.test(string);
+        }
+
+        function showError(text) {
+            errorMsg.textContent = text;
+            errorMsg.classList.remove('hidden');
+            resultContainer.classList.add('hidden');
+            // Сброс состояния кнопки
+            btnText.style.display = 'block';
+            spinner.style.display = 'none';
+            shortenBtn.disabled = false;
+            shortenBtn.classList.remove('opacity-80', 'cursor-not-allowed');
         }
 
         function renderHistory() {
@@ -202,23 +214,25 @@
         shortenBtn.addEventListener('click', async () => {
             let originalUrl = urlInput.value.trim();
 
-            // 1. Проверяем, не пусто ли
+            // ПРОВЕРКИ ПЕРЕД ОТПРАВКОЙ
             if (!originalUrl) {
-                errorMsg.textContent = "Please enter a link.";
-                errorMsg.classList.remove('hidden');
+                showError("Please enter a link.");
                 return;
             }
 
-            // 2. Умное исправление: если пользователь ввел google.com, делаем https://google.com
+            if (!originalUrl.includes('.')) {
+                showError("This is not a valid website address (missing dots).");
+                return;
+            }
+
+            if (!isValidUrl(originalUrl)) {
+                showError("Invalid format. Example: google.com or https://site.kz");
+                return;
+            }
+
+            // Авто-добавление протокола
             if (!/^https?:\/\//i.test(originalUrl)) {
                 originalUrl = 'https://' + originalUrl;
-            }
-
-            // 3. Финальная проверка на валидность сайта
-            if (!isValidUrl(originalUrl)) {
-                errorMsg.textContent = "Please enter a valid website address.";
-                errorMsg.classList.remove('hidden');
-                return;
             }
 
             errorMsg.classList.add('hidden');
@@ -249,12 +263,10 @@
                     urlInput.value = ''; 
                     saveToHistory(originalUrl, data.shortUrl);
                 } else {
-                    errorMsg.textContent = data.error || "Failed to shorten the link.";
-                    errorMsg.classList.remove('hidden');
+                    showError(data.error || "Failed to shorten. Try again.");
                 }
             } catch (error) {
-                errorMsg.textContent = "Server error. Is your Node.js backend running?";
-                errorMsg.classList.remove('hidden');
+                showError("Server connection error. Make sure your backend is live.");
             } finally {
                 btnText.style.display = 'block';
                 spinner.style.display = 'none';
