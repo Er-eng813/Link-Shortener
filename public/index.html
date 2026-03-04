@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Link Shortener</title>
-    <!-- Улучшенная иконка для вкладки браузера (Favicon) -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='100%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='%231292FF'/%3E%3Cstop offset='50%25' stop-color='%23B345FA'/%3E%3Cstop offset='100%25' stop-color='%23FF5364'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='24' height='24' rx='6' fill='url(%23grad)'/%3E%3Cpath fill='white' transform='translate(4,4) scale(0.66)' d='M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z'/%3E%3C/svg%3E">
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -14,7 +12,6 @@
             background-color: #fbfbfd;
             color: #1d1d1f;
         }
-        /* Анимация вращения звезды */
         @keyframes occasional-spin {
             0%, 80% { transform: rotate(0deg) scale(1); }
             83% { transform: rotate(-15deg) scale(1.1); }
@@ -22,7 +19,6 @@
             92%, 100% { transform: rotate(360deg) scale(1); }
         }
         .animate-occasional-spin { animation: occasional-spin 8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
-        
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -30,13 +26,11 @@
         .animate-fade-in { animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .delay-100 { animation-delay: 0.1s; opacity: 0; }
         .delay-200 { animation-delay: 0.2s; opacity: 0; }
-        
         .glass-card { transition: box-shadow 0.4s ease, transform 0.4s ease; }
         .glass-card:focus-within {
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
             transform: translateY(-2px);
         }
-        
         .spinner {
             border: 3px solid rgba(255,255,255,0.3);
             border-top: 3px solid white;
@@ -51,16 +45,13 @@
 </head>
 <body class="min-h-screen flex flex-col p-6 selection:bg-blue-200 relative">
 
-    <!-- Твой новый Apple-логотип -->
     <header class="absolute top-0 left-0 w-full flex justify-center md:justify-start md:left-8 z-50 pointer-events-none">
         <a href="/" class="flex items-center gap-3 pointer-events-auto group mt-6 md:mt-8">
-            <!-- Сама иконка (iPhone Style) -->
             <div class="w-12 h-12 rounded-[12px] bg-gradient-to-tr from-[#1292FF] via-[#B345FA] to-[#FF5364] flex items-center justify-center shadow-lg transition-all duration-500 group-hover:scale-105 group-hover:shadow-xl group-active:scale-95 border border-white/20">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-7 h-7 animate-occasional-spin">
                     <path d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" />
                 </svg>
             </div>
-            <!-- Текст логотипа -->
             <div class="flex flex-col leading-none">
                 <span class="text-xl md:text-2xl font-bold tracking-tight text-[#1d1d1f]">SHORTENER</span>
                 <span class="text-sm md:text-base font-semibold text-[#5143FF]">.KZ</span>
@@ -72,7 +63,6 @@
         
         <div class="text-center mb-8 md:mb-10 animate-fade-in w-full">
             <h1 class="text-3xl md:text-5xl font-semibold tracking-tight mb-5">Shorten your links.</h1>
-            <!-- Вейпоинты (точки) -->
             <div class="flex items-center justify-center gap-4 md:gap-8 text-[#86868b] text-sm md:text-lg font-medium px-4">
                 <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.6)]"></span> Fast</span>
                 <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.6)]"></span> Secure</span>
@@ -80,16 +70,13 @@
             </div>
         </div>
 
-        <!-- Поле ввода -->
         <div class="glass-card w-full bg-white rounded-2xl md:rounded-full shadow-[0_4px_24px_rgba(0,0,0,0.04)] border border-gray-100 p-2 flex flex-col md:flex-row items-center animate-fade-in delay-100">
             <div class="flex-1 w-full px-4 py-3 md:py-0">
                 <input type="url" id="urlInput" class="w-full bg-transparent text-base md:text-lg outline-none placeholder-gray-400 text-gray-800" placeholder="Paste your long link here..." autocomplete="off">
             </div>
             
-            <!-- Разделитель (виден только на мобилке) -->
             <div class="w-[90%] h-px bg-gray-100 md:hidden my-1"></div>
 
-            <!-- ИСПРАВЛЕНО: Убрали hidden, теперь меню символов отлично видно на телефоне -->
             <div class="flex w-full md:w-auto items-center justify-center py-2 md:py-0 px-3 md:border-l border-gray-100">
                 <select id="lengthSelect" class="bg-transparent text-gray-500 font-medium outline-none cursor-pointer text-sm w-full md:w-auto text-center md:text-left">
                     <option value="3">3 symbols</option>
@@ -105,7 +92,6 @@
             </button>
         </div>
 
-        <!-- Контейнер результата -->
         <div id="resultContainer" class="hidden w-full mt-6 md:mt-8 animate-fade-in delay-200">
             <div class="bg-white rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] border border-gray-100 p-5 md:p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div class="flex-1 overflow-hidden w-full text-center sm:text-left">
@@ -118,7 +104,6 @@
 
         <p id="errorMsg" class="text-red-500 mt-6 font-medium hidden animate-fade-in text-center px-4"></p>
 
-        <!-- Секция истории -->
         <div id="historyContainer" class="hidden w-full mt-12 animate-fade-in delay-200">
             <div class="flex items-center justify-between mb-4 px-2">
                 <h2 class="text-[11px] md:text-xs font-semibold text-gray-400 uppercase tracking-wider">Your Recent Links</h2>
@@ -144,6 +129,17 @@
         const lengthSelect = document.getElementById('lengthSelect');
         
         let linkHistory = JSON.parse(localStorage.getItem('shortenerHistory')) || [];
+
+        // --- ФУНКЦИИ ВАЛИДАЦИИ ---
+        function isValidUrl(string) {
+            try {
+                const url = new URL(string);
+                // Проверяем, что это HTTP или HTTPS
+                return url.protocol === "http:" || url.protocol === "https:";
+            } catch (_) {
+                return false;  
+            }
+        }
 
         function renderHistory() {
             if (linkHistory.length === 0) {
@@ -204,9 +200,23 @@
         }
 
         shortenBtn.addEventListener('click', async () => {
-            const originalUrl = urlInput.value.trim();
+            let originalUrl = urlInput.value.trim();
+
+            // 1. Проверяем, не пусто ли
             if (!originalUrl) {
-                errorMsg.textContent = "Please enter a valid URL.";
+                errorMsg.textContent = "Please enter a link.";
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
+            // 2. Умное исправление: если пользователь ввел google.com, делаем https://google.com
+            if (!/^https?:\/\//i.test(originalUrl)) {
+                originalUrl = 'https://' + originalUrl;
+            }
+
+            // 3. Финальная проверка на валидность сайта
+            if (!isValidUrl(originalUrl)) {
+                errorMsg.textContent = "Please enter a valid website address.";
                 errorMsg.classList.remove('hidden');
                 return;
             }
